@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,6 +17,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Outfit', sans-serif;
   background: #f9fafb;
@@ -27,9 +34,21 @@ body {
 }
 
 .button-primary {
-  @apply px-6 py-3 bg-yellow-500 text-white font-bold rounded hover:bg-yellow-600 transition;
+  @apply px-8 py-3 bg-yellow-500 text-black font-bold rounded hover:bg-white transition shadow-[0_0_20px_rgba(255,193,7,0.4)];
 }
 
 .button-secondary {
-  @apply px-6 py-3 border border-gray-400 text-gray-700 font-bold rounded hover:border-yellow-500 transition;
+  @apply px-8 py-3 border border-gray-500 text-white rounded hover:border-yellow-500 hover:text-yellow-500 transition;
+}
+
+.brand-navy {
+  color: #0a192f;
+}
+
+.brand-gold {
+  color: #FFC107;
+}
+
+.brand-dark {
+  background: #020c1b;
 }

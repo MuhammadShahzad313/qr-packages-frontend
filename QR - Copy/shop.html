@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Products | QR Packages</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { brandNavy: '#0a192f', brandGold: '#FFC107', brandDark: '#020c1b' }, fontFamily: { sans: ['Outfit', 'sans-serif'] } } }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-brandNavy font-sans">
+
+    <nav class="sticky top-0 z-50 bg-brandNavy text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <img src="images\logo.jpeg" class="h-10 bg-white rounded p-1">
+                <span class="font-bold text-lg hidden sm:block">QR PACKAGES</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="hover:text-brandGold text-sm">Home</a>
+                <button onclick="toggleCart()" class="bg-brandGold text-brandNavy px-4 py-2 rounded font-bold flex items-center gap-2">
+                    <i class="fas fa-shopping-cart"></i> <span id="cart-total">0</span> Items
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex flex-col md:flex-row min-h-screen max-w-7xl mx-auto pt-8">
+        
+        <aside class="w-full md:w-1/4 px-4 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-lg sticky top-24">
+                <h3 class="font-bold text-xl mb-6 border-b pb-2">Categories</h3>
+                <ul class="space-y-3 text-gray-600" id="category-list">
+    <li class="hover:text-brandGold cursor-pointer font-medium" data-category="All">All Products</li>
+    <li class="hover:text-brandGold cursor-pointer font-medium" data-category="Hot">Hot Coffee Cups</li>
+    <li class="hover:text-brandGold cursor-pointer font-medium" data-category="Cold">Cold/Juice Cups</li>
+    <li class="hover:text-brandGold cursor-pointer font-medium" data-category="Food">Food & Boxes</li>
+    <li class="hover:text-brandGold cursor-pointer font-medium" data-category="Snack">Popcorn Boxes</li>
+    <li class="hover:text-brandGold cursor-pointer font-medium" data-category="Cutlery">Cutlery & Straws</li>
+    <li class="hover:text-brandGold cursor-pointer font-medium" data-category="Lids">Cup Lids</li>
+</ul>
+
+                <div class="mt-8 bg-brandNavy text-white p-4 rounded-lg text-center">
+                    <p class="text-sm mb-2">Need Custom Printing?</p>
+                    <a href="contact.html" class="text-brandGold font-bold text-sm underline">Contact Support</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="w-full md:w-3/4 px-4 pb-20">
+            <h1 class="text-3xl font-bold mb-2">Product Catalog</h1>
+            <p class="text-gray-500 mb-8">Select items to build your wholesale inquiry.</p>
+
+            <!-- Search and Category Filter -->
+<div class="flex flex-col sm:flex-row justify-between mb-6 gap-4">
+    <input id="search-input" type="text" placeholder="Search products..." class="border border-gray-300 rounded px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-brandGold">
+    <div class="flex flex-wrap gap-2">
+        <button class="category-btn bg-brandGold text-white px-3 py-1 rounded" data-category="All">All</button>
+        <button class="category-btn bg-gray-200 text-gray-700 px-3 py-1 rounded" data-category="Hot">Hot Coffee Cups</button>
+        <button class="category-btn bg-gray-200 text-gray-700 px-3 py-1 rounded" data-category="Cold">Cold/Juice Cups</button>
+        <button class="category-btn bg-gray-200 text-gray-700 px-3 py-1 rounded" data-category="Food">Food & Boxes</button>
+        <button class="category-btn bg-gray-200 text-gray-700 px-3 py-1 rounded" data-category="Snack">Popcorn Boxes</button>
+        <button class="category-btn bg-gray-200 text-gray-700 px-3 py-1 rounded" data-category="Cutlery">Cutlery & Straws</button>
+        <button class="category-btn bg-gray-200 text-gray-700 px-3 py-1 rounded" data-category="Lids">Cup Lids</button>
+    </div>
+</div>
+
+<!-- Product Grid -->
+<div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+<!-- Product Detail Modal -->
+<div id="product-modal" class="fixed inset-0 bg-black/50 hidden z-[70] justify-center items-center p-4">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl overflow-y-auto max-h-[90vh] p-6 relative">
+        <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl"><i class="fas fa-times"></i></button>
+        <div id="modal-content" class="flex flex-col lg:flex-row gap-6"></div>
+        <h3 class="text-xl font-bold mt-6 mb-3">Related Items</h3>
+        <div id="related-items" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+    </div>
+</div>
+
+
+        </main>
+
+    </div>
+
+    <div id="cart-modal" class="fixed inset-0 bg-black/50 hidden z-[60] justify-end">
+        <div class="bg-white w-full md:w-[400px] h-full p-6 flex flex-col">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 class="text-2xl font-bold">Your Inquiry</h2>
+                <button onclick="toggleCart()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4">
+                <p class="text-gray-500 text-center mt-10">Your cart is empty.</p>
+            </div>
+
+            <div class="mt-6 pt-4 border-t">
+                <button onclick="checkoutWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-3 transition">
+                    <i class="fab fa-whatsapp text-2xl"></i> Send Order on WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. The Database of Products (Bulky Content)
+       const products = [
+  // --- HOT COFFEE CUPS ---
+  { id: 1, name: "Ripple Wall Coffee Cup – 8 oz", category: "Hot", size: "8 oz", img: "https://images.unsplash.com/photo-1600170311835-f44a6f3dd89f?w=400", desc: "Premium ripple wall hot beverage cup.", intl_price: "$0.06 – $0.08", local_price: "PKR 10 – 14", stock: "2500 pcs" },
+  { id: 2, name: "Ripple Wall Coffee Cup – 12 oz", category: "Hot", size: "12 oz", img: "https://images.unsplash.com/photo-1517705008128-361805f42e86?w=400", desc: "Triple-layer insulated ripple cup.", intl_price: "$0.07 – $0.10", local_price: "PKR 12 – 18", stock: "3000 pcs" },
+  { id: 3, name: "Ripple Wall Coffee Cup – 16 oz", category: "Hot", size: "16 oz", img: "https://images.unsplash.com/photo-1549399542-7e3f8bde4f32?w=400", desc: "Large ripple wall coffee cup.", intl_price: "$0.08 – $0.12", local_price: "PKR 14 – 20", stock: "2000 pcs" },
+  { id: 4, name: "Single Wall Paper Cup – 6 oz", category: "Hot", size: "6 oz", img: "https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?w=400", desc: "Budget-friendly hot cup.", intl_price: "$0.02 – $0.04", local_price: "PKR 4 – 7", stock: "5000 pcs" },
+  { id: 5, name: "Single Wall Paper Cup – 8 oz", category: "Hot", size: "8 oz", img: "https://images.unsplash.com/photo-1572868961513-36c6e0d1de87?w=400", desc: "Standard paper hot beverage cup.", intl_price: "$0.03 – $0.05", local_price: "PKR 6 – 10", stock: "4000 pcs" },
+  { id: 6, name: "Double Wall Coffee Cup – 12 oz", category: "Hot", size: "12 oz", img: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400", desc: "Heat-resistant double wall cup.", intl_price: "$0.07 – $0.11", local_price: "PKR 12 – 18", stock: "3000 pcs" },
+
+  // --- COLD / JUICE CUPS ---
+  { id: 7, name: "PET Cold Drink Cup – 12 oz", category: "Cold", size: "12 oz", img: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400", desc: "Crystal clear PET cold cup.", intl_price: "$0.06 – $0.09", local_price: "PKR 10 – 16", stock: "2500 pcs" },
+  { id: 8, name: "PET Cold Drink Cup – 16 oz", category: "Cold", size: "16 oz", img: "https://images.unsplash.com/photo-1551022372-0bd7f3aee0f5?w=400", desc: "Durable PET juice cup.", intl_price: "$0.08 – $0.12", local_price: "PKR 14 – 20", stock: "2000 pcs" },
+  { id: 9, name: "PET Cold Drink Cup – 22 oz", category: "Cold", size: "22 oz", img: "https://images.unsplash.com/photo-1537009432298-79e4ad5eccee?w=400", desc: "Large iced drink cup.", intl_price: "$0.10 – $0.15", local_price: "PKR 18 – 26", stock: "1500 pcs" },
+  { id: 10, name: "Ice Cream Cup – 100 ml", category: "Cold", size: "100 ml", img: "https://images.unsplash.com/photo-1523475496153-3d6ccfca9cfd?w=400", desc: "Small printed ice cream cup.", intl_price: "$0.03 – $0.05", local_price: "PKR 6 – 10", stock: "4000 pcs" },
+  { id: 11, name: "Ice Cream Cup – 200 ml", category: "Cold", size: "200 ml", img: "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400", desc: "Medium-size coated dessert cup.", intl_price: "$0.04 – $0.06", local_price: "PKR 8 – 12", stock: "3000 pcs" },
+  { id: 12, name: "Salad Bowl – 750 ml PET", category: "Cold", size: "750 ml", img: "https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=400", desc: "Crystal PET salad bowl.", intl_price: "$0.12 – $0.18", local_price: "PKR 30 – 45", stock: "1500 pcs" },
+  { id: 13, name: "Salad Bowl – 1000 ml PET", category: "Cold", size: "1000 ml", img: "https://images.unsplash.com/photo-1589476993369-0f43e51bc4ab?w=400", desc: "Large PET food bowl.", intl_price: "$0.14 – $0.20", local_price: "PKR 35 – 55", stock: "1200 pcs" },
+
+  // --- FOOD & BOXES ---
+  { id: 14, name: "Burger Box (Kraft)", category: "Food", size: "Standard", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400", desc: "Eco-friendly kraft burger box.", intl_price: "$0.05 – $0.07", local_price: "PKR 12 – 20", stock: "3000 pcs" },
+  { id: 15, name: "Burger Box (White Coated)", category: "Food", size: "Standard", img: "https://images.unsplash.com/photo-1625938146121-f8dc76e95d85?w=400", desc: "Food-grade coated burger box.", intl_price: "$0.06 – $0.09", local_price: "PKR 14 – 22", stock: "2500 pcs" },
+  { id: 16, name: "Sandwich Wedge Box (Kraft)", category: "Food", size: "Large", img: "https://images.unsplash.com/photo-1542868727-0d89f6c4151e?w=400", desc: "Triangular window sandwich box.", intl_price: "$0.08 – $0.12", local_price: "PKR 16 – 26", stock: "2000 pcs" },
+  { id: 17, name: "Pizza Box – 12 inch", category: "Food", size: "12 inch", img: "https://images.unsplash.com/photo-1601924582971-dbb57a4d0f88?w=400", desc: "Durable corrugated pizza box.", intl_price: "$0.20 – $0.28", local_price: "PKR 45 – 70", stock: "1500 pcs" },
+  { id: 18, name: "Pizza Box – 14 inch", category: "Food", size: "14 inch", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400", desc: "Large size kraft pizza box.", intl_price: "$0.25 – $0.32", local_price: "PKR 55 – 85", stock: "1200 pcs" },
+  { id: 19, name: "French Fry Scoop", category: "Food", size: "Standard", img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400", desc: "Classic fry serving scoop.", intl_price: "$0.03 – $0.05", local_price: "PKR 6 – 10", stock: "4000 pcs" },
+  { id: 20, name: "French Fry Box (Kraft)", category: "Food", size: "Medium", img: "https://images.unsplash.com/photo-1597401238102-8f4ecf7a64de?w=400", desc: "Grease-resistant fry box.", intl_price: "$0.04 – $0.06", local_price: "PKR 8 – 12", stock: "3000 pcs" },
+  { id: 21, name: "Paper Food Tray (Small)", category: "Food", size: "Small", img: "https://images.unsplash.com/photo-1601312379653-72ec2aef0689?w=400", desc: "Coated cardboard food tray.", intl_price: "$0.04 – $0.06", local_price: "PKR 8 – 12", stock: "3500 pcs" },
+  { id: 22, name: "Paper Food Tray (Large)", category: "Food", size: "Large", img: "https://images.unsplash.com/photo-1601312379715-a0e0eaa90bf7?w=400", desc: "Large kraft tray for meals.", intl_price: "$0.06 – $0.09", local_price: "PKR 12 – 18", stock: "2500 pcs" },
+  { id: 23, name: "Donut Box (4 Count)", category: "Food", size: "4 pcs", img: "https://images.unsplash.com/photo-1584277266909-e1d6d9aed686?w=400", desc: "Window bakery box.", intl_price: "$0.10 – $0.14", local_price: "PKR 20 – 30", stock: "2000 pcs" },
+  { id: 24, name: "Cake Box (10 inch)", category: "Food", size: "10 inch", img: "https://images.unsplash.com/photo-1606312619070-d28f52ec8e63?w=400", desc: "High-strength cake box.", intl_price: "$0.20 – $0.28", local_price: "PKR 45 – 70", stock: "1000 pcs" },
+  { id: 25, name: "Soup Bowl with Lid (500 ml)", category: "Food", size: "500 ml", img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400", desc: "Thick kraft soup container.", intl_price: "$0.10 – $0.14", local_price: "PKR 20 – 35", stock: "1500 pcs" },
+  { id: 26, name: "Soup Bowl with Lid (750 ml)", category: "Food", size: "750 ml", img: "https://images.unsplash.com/photo-1583071943807-3fd040ae1f26?w=400", desc: "Large kraft soup bowl.", intl_price: "$0.13 – $0.18", local_price: "PKR 25 – 40", stock: "1200 pcs" },
+  { id: 27, name: "Kraft Takeaway Box (No. 1)", category: "Food", size: "700 ml", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400", desc: "Leak-resistant food box.", intl_price: "$0.08 – $0.12", local_price: "PKR 18 – 26", stock: "2000 pcs" },
+  { id: 28, name: "Kraft Takeaway Box (No. 3)", category: "Food", size: "1100 ml", img: "https://images.unsplash.com/photo-1586201375761-83865001e31b?w=400", desc: "Large kraft food container.", intl_price: "$0.12 – $0.16", local_price: "PKR 25 – 40", stock: "1500 pcs" },
+
+  // --- POPCORN BOXES ---
+  { id: 29, name: "Popcorn Tub – 32 oz", category: "Snack", size: "32 oz", img: "https://images.unsplash.com/photo-1512427691650-1f7c1c1c11b1?w=400", desc: "Cinema-style popcorn bucket.", intl_price: "$0.12 – $0.18", local_price: "PKR 25 – 35", stock: "2000 pcs" },
+  { id: 30, name: "Popcorn Tub – 46 oz", category: "Snack", size: "46 oz", img: "https://images.unsplash.com/photo-1542928658-22224b1a87f7?w=400", desc: "Large kraft popcorn tub.", intl_price: "$0.14 – $0.20", local_price: "PKR 30 – 45", stock: "1500 pcs" },
+
+  // --- CUTLERY & STRAWS ---
+  { id: 31, name: "Paper Straw (White, 6mm)", category: "Cutlery", size: "6mm x 210 mm", img: "https://images.unsplash.com/photo-1619250914619-74d32eb7a193?w=400", desc: "Eco-friendly paper straw.", intl_price: "$0.005 – $0.01", local_price: "PKR 1 – 2", stock: "5000 pcs" },
+  { id: 32, name: "Paper Straw (Striped)", category: "Cutlery", size: "6mm x 210 mm", img: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=400", desc: "Color-striped paper straws.", intl_price: "$0.005 – $0.012", local_price: "PKR 1 – 3", stock: "4000 pcs" },
+  { id: 33, name: "Cutlery Set (Spoon, Fork, Tissue)", category: "Cutlery", size: "3 pcs", img: "https://images.unsplash.com/photo-1611095973517-e66e4f3a3b85?w=400", desc: "Packed disposable cutlery.", intl_price: "$0.07 – $0.10", local_price: "PKR 15 – 25", stock: "2000 pcs" },
+
+  // --- CUP LIDS ---
+  { id: 34, name: "Hot Paper Cup Lid (Black, 80mm)", category: "Lids", size: "80 mm", img: "https://images.unsplash.com/photo-1618417826267-9234ab8132df?w=400", desc: "Fits 8oz–10oz cups.", intl_price: "$0.01 – $0.02", local_price: "PKR 2 – 4", stock: "4000 pcs" },
+  { id: 35, name: "Cold Cup Dome Lid (PET)", category: "Lids", size: "98 mm", img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400", desc: "Dome lid for smoothies.", intl_price: "$0.02 – $0.03", local_price: "PKR 3 – 6", stock: "3500 pcs" }
+];
+
+
+        let cart = [];
+
+        const grid = document.getElementById('product-grid');
+
+// Render products function
+function renderProducts(filterCategory = "All") {
+    grid.innerHTML = ""; // Clear previous products
+
+    const filteredProducts = filterCategory === "All"
+        ? products
+        : products.filter(p => p.category === filterCategory);
+
+    filteredProducts.forEach(p => {
+        grid.innerHTML += `
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition border border-gray-100 flex flex-col cursor-pointer" onclick="openProductModal(${p.id})">
+                <div class="h-48 overflow-hidden bg-gray-100">
+                    <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-brandGold bg-brandNavy px-2 py-1 rounded uppercase">${p.category}</span>
+                        <h3 class="font-bold text-lg mt-2 text-brandNavy">${p.name}</h3>
+                        <p class="text-gray-500 text-sm mt-1">${p.desc}</p>
+                        <p class="text-gray-700 text-sm mt-1 font-semibold">Stock: ${p.stock}</p>
+                        <p class="text-gray-700 text-sm mt-1">Intl: ${p.intl_price} | Local: ${p.local_price}</p>
+                    </div>
+                    <button onclick="addToCart(${p.id})" class="mt-4 w-full border-2 border-brandNavy text-brandNavy font-bold py-2 rounded hover:bg-brandNavy hover:text-white transition flex justify-center items-center gap-2">
+                        <i class="fas fa-plus"></i> Add to Quote
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Product modal functionality
+const productModal = document.getElementById('product-modal');
+const modalContent = document.getElementById('modal-content');
+const relatedItemsDiv = document.getElementById('related-items');
+
+function openProductModal(id) {
+    const product = products.find(p => p.id === id);
+
+    modalContent.innerHTML = `
+        <div class="flex-1">
+            <img src="${product.img}" class="w-full h-64 object-cover rounded-lg">
+        </div>
+        <div class="flex-1 flex flex-col gap-2">
+            <h2 class="text-2xl font-bold">${product.name}</h2>
+            <p class="text-gray-500 mt-2">${product.desc}</p>
+            <p class="text-sm mt-1 font-medium">Size: ${product.size} | Stock: ${product.stock}</p>
+            <p class="text-sm mt-1 font-bold">Intl: ${product.intl_price} | Local: ${product.local_price}</p>
+            <button onclick="addToCart(${product.id})" class="mt-4 w-full border-2 border-brandNavy text-brandNavy font-bold py-2 rounded hover:bg-brandNavy hover:text-white transition flex justify-center items-center gap-2">
+                <i class="fas fa-plus"></i> Add to Quote
+            </button>
+        </div>
+    `;
+
+    // Related items (same category)
+    const related = products.filter(p => p.category === product.category && p.id !== product.id);
+    relatedItemsDiv.innerHTML = related.map(r => `
+        <div class="bg-gray-50 rounded-lg p-2 cursor-pointer hover:shadow-lg" onclick="openProductModal(${r.id})">
+            <img src="${r.img}" class="w-full h-24 object-cover rounded mb-2">
+            <p class="text-sm font-medium">${r.name}</p>
+        </div>
+    `).join('');
+
+    productModal.classList.remove('hidden');
+    productModal.classList.add('flex');
+}
+
+function closeProductModal() {
+    productModal.classList.add('hidden');
+    productModal.classList.remove('flex');
+}
+
+// Initial render
+renderProducts();
+
+
+// Initial render - show all products
+renderProducts();
+
+// Category filtering
+const categoryItems = document.querySelectorAll("#category-list li");
+categoryItems.forEach(item => {
+    item.addEventListener("click", () => {
+        const category = item.getAttribute("data-category");
+        renderProducts(category);
+    });
+});
+
+        // 3. Cart Logic
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCartUI();
+            toggleCart(); // Open cart to show user
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-total').innerText = cart.length;
+            const cartList = document.getElementById('cart-items');
+            
+            if(cart.length === 0) {
+                cartList.innerHTML = '<p class="text-gray-500 text-center mt-10">Your cart is empty.</p>';
+            } else {
+                cartList.innerHTML = cart.map((item, index) => `
+                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.img}" class="w-10 h-10 object-cover rounded">
+                            <span class="font-bold text-sm">${item.name}</span>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        // 4. WhatsApp Checkout
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return alert("Please add items first!");
+            
+            let message = "Hello QR Packages! I am interested in ordering:%0A%0A";
+            cart.forEach((item, i) => {
+                message += `${i+1}. ${item.name}%0A`;
+            });
+            message += "%0APlease provide price quotation and export details.";
+            
+            // Replace with Client's Number
+            window.open(`https://wa.me/923014163299?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+</html>

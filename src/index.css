@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-navy: #0a192f;
+  --brand-gold: #FFC107;
+  --brand-dark: #020c1b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #f9fafb;
+  color: var(--brand-navy);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.button-primary {
+  @apply px-6 py-3 bg-yellow-500 text-white font-bold rounded hover:bg-yellow-600 transition;
+}
+
+.button-secondary {
+  @apply px-6 py-3 border border-gray-400 text-gray-700 font-bold rounded hover:border-yellow-500 transition;
+}

@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 function Process() {
   const steps = [
@@ -6,7 +8,7 @@ function Process() {
       number: 1,
       title: 'Raw Material Sourcing',
       description: 'We source premium food-grade paperboard coated with PE (Polyethylene) to ensure water resistance and safety.',
-      icon: '🏭',
+      img: 'https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=600&h=400&fit=crop',
       bgColor: '#FFC107',
       textColor: '#020c1b'
     },
@@ -14,7 +16,7 @@ function Process() {
       number: 2,
       title: 'Precision Printing',
       description: 'Using Flexographic printing, we apply your brand logo and designs with food-safe ink before the paper is cut.',
-      icon: '🖨️',
+      img: 'https://images.unsplash.com/photo-1599599810694-2392dc4199cc?w=600&h=400&fit=crop',
       bgColor: '#0a192f',
       textColor: 'white'
     },
@@ -22,7 +24,7 @@ function Process() {
       number: 3,
       title: 'Die Cutting',
       description: 'The printed rolls are punched into "fan" shapes (sidewalls) and circular bottoms with extreme precision.',
-      icon: '✂️',
+      img: 'https://images.unsplash.com/photo-1572527238267-f8e76e5d98ab?w=600&h=400&fit=crop',
       bgColor: '#FFC107',
       textColor: '#020c1b'
     },
@@ -30,110 +32,122 @@ function Process() {
       number: 4,
       title: 'High-Speed Forming',
       description: 'Our machines fold the fans into cylinders and heat-seal the bottoms to prevent any leakage.',
-      icon: '⚙️',
+      img: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop',
       bgColor: '#0a192f',
       textColor: 'white'
     },
     {
       number: 5,
-      title: 'Quality Control',
+      title: 'Quality Control & Testing',
       description: 'Every batch undergoes leak testing and visual inspection to meet international export standards.',
-      icon: '✅',
+      img: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&h=400&fit=crop',
       bgColor: '#FFC107',
       textColor: '#020c1b'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ backgroundColor: '#f9fafb' }}>
+      <Navbar />
+
       {/* Header */}
-      <div className="py-16 px-4" style={{ backgroundColor: '#020c1b' }}>
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Our Manufacturing <span style={{ color: '#FFC107' }}>Standard</span>
-          </h1>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            We follow a rigorous 5-step industrial process to ensure every cup is leak-proof, food-safe, and export-quality.
-          </p>
-        </div>
+      <div className="py-16 px-4 text-white text-center" style={{ backgroundColor: '#020c1b' }}>
+        <h1 className="text-5xl font-bold mb-4">Manufacturing <span style={{ color: '#FFC107' }}>Process</span></h1>
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          We follow a rigorous 5-step industrial process to ensure every cup is leak-proof, food-safe, and export-quality.
+        </p>
       </div>
 
       {/* Timeline Process */}
-      <section className="py-20 px-4 max-w-5xl mx-auto">
-        <div className="space-y-12">
-          {steps.map((step, index) => (
-            <div key={step.number} className={`flex items-center gap-8 ${index % 2 === 1 ? 'flex-row-reverse' : ''}`}>
-              {/* Content */}
+      <section className="py-20 px-4 max-w-7xl mx-auto">
+        {steps.map((step, index) => (
+          <div key={step.number} className="mb-20">
+            <div className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center`}>
+              {/* Text Content */}
               <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-3" style={{ color: '#0a192f' }}>
-                  {step.number}. {step.title}
-                </h3>
-                <p className="text-gray-600 text-lg">
+                <div className="flex items-start gap-4 mb-6">
+                  <div 
+                    className="flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center font-bold text-3xl text-white"
+                    style={{ backgroundColor: step.bgColor, color: step.textColor }}
+                  >
+                    {step.number}
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-bold" style={{ color: '#0a192f' }}>
+                      {step.title}
+                    </h3>
+                  </div>
+                </div>
+                <p className="text-gray-600 text-lg leading-relaxed">
                   {step.description}
                 </p>
               </div>
 
-              {/* Step Circle */}
-              <div 
-                className="flex-shrink-0 w-20 h-20 rounded-full border-4 border-white shadow-xl flex items-center justify-center font-bold text-2xl"
-                style={{ backgroundColor: step.bgColor, color: step.textColor }}
-              >
-                {step.number}
-              </div>
-
-              {/* Image Placeholder */}
+              {/* Image */}
               <div className="flex-1">
-                <div 
-                  className="h-48 rounded-lg shadow-lg flex items-center justify-center text-4xl"
-                  style={{ backgroundColor: '#e0e0e0' }}
-                >
-                  {step.icon}
-                </div>
+                <img 
+                  src={step.img} 
+                  alt={step.title} 
+                  className="w-full h-80 object-cover rounded-xl shadow-lg"
+                />
               </div>
             </div>
-          ))}
-        </div>
+
+            {/* Divider */}
+            {index < steps.length - 1 && (
+              <div className="flex justify-center my-8">
+                <div className="text-4xl" style={{ color: '#FFC107' }}>↓</div>
+              </div>
+            )}
+          </div>
+        ))}
       </section>
 
-      {/* Video Section */}
-      <section className="py-16 px-4" style={{ backgroundColor: '#0a192f' }}>
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-4xl font-bold mb-4">See Us In Action</h2>
-          <p className="text-gray-300 mb-8">Watch our manufacturing process in detail</p>
-          
-          <div className="aspect-video bg-gray-800 rounded-xl flex items-center justify-center border-4" style={{ borderColor: '#FFC107' }}>
-            <div className="text-center">
-              <i className="fas fa-play-circle text-6xl mb-4" style={{ color: '#FFC107' }}></i>
-              <p className="text-xl">Video coming soon...</p>
+      {/* Video/Factory Section */}
+      <section className="py-20 px-4 text-white" style={{ backgroundColor: '#0a192f' }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">See Us In Action</h2>
+            <p className="text-gray-400 text-lg">Watch our state-of-the-art manufacturing facility at work</p>
+          </div>
+
+          <div className="aspect-video rounded-xl overflow-hidden shadow-2xl relative cursor-pointer group">
+            <img 
+              src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=1200&h=800&fit=crop"
+              alt="Factory"
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+            />
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/60 transition">
+              <i className="fas fa-play-circle text-7xl text-white group-hover:scale-110 transition duration-500"></i>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12" style={{ color: '#0a192f' }}>
-            Why Our Process Stands Out
+          <h2 className="text-4xl font-bold text-center mb-16" style={{ color: '#0a192f' }}>
+            Why Our Process <span style={{ color: '#FFC107' }}>Stands Out</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 rounded-lg bg-gray-50">
-              <div className="text-4xl mb-4">🌍</div>
-              <h3 className="text-lg font-bold mb-2" style={{ color: '#0a192f' }}>International Standards</h3>
-              <p className="text-gray-600">Meets FDA, ISO, and food safety certification requirements worldwide.</p>
+            <div className="p-8 rounded-lg text-center" style={{ backgroundColor: '#f3f4f6' }}>
+              <div className="text-5xl mb-6">🌍</div>
+              <h3 className="text-2xl font-bold mb-4" style={{ color: '#0a192f' }}>International Standards</h3>
+              <p className="text-gray-600">Meets FDA, ISO, and food safety certification requirements worldwide. Approved for all major markets.</p>
             </div>
 
-            <div className="text-center p-6 rounded-lg bg-gray-50">
-              <div className="text-4xl mb-4">♻️</div>
-              <h3 className="text-lg font-bold mb-2" style={{ color: '#0a192f' }}>Eco-Friendly</h3>
-              <p className="text-gray-600">Using recyclable materials and sustainable manufacturing practices.</p>
+            <div className="p-8 rounded-lg text-center" style={{ backgroundColor: '#f3f4f6' }}>
+              <div className="text-5xl mb-6">♻️</div>
+              <h3 className="text-2xl font-bold mb-4" style={{ color: '#0a192f' }}>Eco-Friendly</h3>
+              <p className="text-gray-600">Using recyclable materials and sustainable manufacturing practices. Reducing carbon footprint daily.</p>
             </div>
 
-            <div className="text-center p-6 rounded-lg bg-gray-50">
-              <div className="text-4xl mb-4">🚀</div>
-              <h3 className="text-lg font-bold mb-2" style={{ color: '#0a192f' }}>High-Speed Production</h3>
-              <p className="text-gray-600">Capable of producing millions of cups monthly without compromising quality.</p>
+            <div className="p-8 rounded-lg text-center" style={{ backgroundColor: '#f3f4f6' }}>
+              <div className="text-5xl mb-6">⚡</div>
+              <h3 className="text-2xl font-bold mb-4" style={{ color: '#0a192f' }}>High-Speed Capacity</h3>
+              <p className="text-gray-600">Capable of producing millions of cups monthly without compromising quality or consistency.</p>
             </div>
           </div>
         </div>
@@ -141,12 +155,25 @@ function Process() {
 
       {/* CTA Section */}
       <section className="py-16 px-4 text-white text-center" style={{ backgroundColor: '#0a192f' }}>
-        <h2 className="text-3xl font-bold mb-4">Ready to Order?</h2>
-        <p className="text-gray-300 mb-8">Browse our products and place your order today</p>
-        <a href="/shop" className="inline-block px-8 py-3 rounded font-bold transition hover:opacity-90" style={{ backgroundColor: '#FFC107', color: '#020c1b' }}>
-          Start Shopping
-        </a>
+        <h2 className="text-4xl font-bold mb-4">Ready to Place Your Order?</h2>
+        <p className="text-gray-400 mb-8 text-lg">Browse our complete product catalog and find the perfect packaging solution for your business</p>
+        <Link to="/shop" className="inline-block px-10 py-4 rounded font-bold transition hover:opacity-90 text-lg" style={{ backgroundColor: '#FFC107', color: '#020c1b' }}>
+          <i className="fas fa-shopping-cart mr-2"></i>Start Shopping Now
+        </Link>
       </section>
+
+      {/* Footer */}
+      <footer className="text-gray-400 py-12 border-t border-gray-800" style={{ backgroundColor: '#020c1b' }}>
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <img src="https://via.placeholder.com/80?text=QR" alt="Logo" className="h-16 mx-auto mb-6 bg-white rounded p-2" />
+          <p className="mb-4">&copy; 2025 QR Packages. All International Rights Reserved.</p>
+          <div className="flex justify-center gap-6 text-2xl">
+            <i className="fab fa-whatsapp hover:text-green-500 cursor-pointer"></i>
+            <i className="fab fa-instagram hover:text-pink-500 cursor-pointer"></i>
+            <i className="fab fa-facebook hover:text-blue-500 cursor-pointer"></i>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
